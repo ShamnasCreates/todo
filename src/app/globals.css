@@ -1,0 +1,36 @@
+@import "tailwindcss";
+@import 'material-symbols';
+
+:root {
+	--black: #0F0F0F;
+	--white: #EFEFEF;
+	--green: #00CC44; 
+	--yellow: #CCCC00; 
+}
+
+
+@theme inline {
+	--color-blackX: var(--black);
+	--color-whiteX: var(--white);
+	--color-greenX: var(--green);
+	--color-yellowX: var(--yellow);
+	--font-libre: var(--font-libre);
+	--font-mont: var(--font-mont);
+
+}
+
+/* 
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
+} */
+
+
+
+body {
+	background: var(--black);
+	color: var(--white);
+	font-family: Arial, Helvetica, sans-serif;
+} 

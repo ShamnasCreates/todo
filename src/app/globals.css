@@ -1,36 +1,51 @@
 @import "tailwindcss";
-@import 'material-symbols';
+@import "material-symbols";
 
+/* base colors */
 :root {
-	--black: #0F0F0F;
-	--white: #EFEFEF;
-	--green: #00CC44; 
-	--yellow: #CCCC00; 
+  --black: #0f0f0f;
+  --white: #efefef;
+  --green: #00cc44;
+  --yellow: #cccc00;
 }
-
 
 @theme inline {
-	--color-blackX: var(--black);
-	--color-whiteX: var(--white);
-	--color-greenX: var(--green);
-	--color-yellowX: var(--yellow);
-	--font-libre: var(--font-libre);
-	--font-mont: var(--font-mont);
-
+  --color-blackX: var(--black);
+  --color-whiteX: var(--white);
+  --color-greenX: var(--green);
+  --color-yellowX: var(--yellow);
+  --font-libre: var(--font-libre);
+  --font-mont: var(--font-mont);
 }
 
-/* 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
-} */
+/* remove scroll from  */
+@layer scroll {
+  .scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .scroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
 
+/* remove scroll from  */
+@layer noselect {
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+  }
+}
 
-
+/* global */
 body {
-	background: var(--black);
-	color: var(--white);
-	font-family: Arial, Helvetica, sans-serif;
-} 
+  /* set background and foreground */
+  background: var(--black);
+  color: var(--white);
+  
+}

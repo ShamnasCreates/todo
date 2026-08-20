@@ -1,9 +1,9 @@
-import AddTask from "./components/AddTask";
 
+// TODO: redirect to current date 
 export default function Home() {
   return (
     <div>
-      <AddTask />
+      <h1>TODO</h1> 
     </div>
   );
 }

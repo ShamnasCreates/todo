@@ -15,14 +15,14 @@ export default function TaskViewList({
   const todayDo = useLiveQuery(async () => {
 
     // Query Dexie's API
-    const friends = await db.todoDate
+    const tododate = await db.todoDate
       .where("date")
       .equals((await params).date)
       .sortBy("todo_id");
 
     let todoArray = [];
 
-    for (const todo of friends) {
+    for (const todo of tododate) {
       let test = await db.todo.where("id").equals(todo.todo_id).first();
 
       todoArray.push(test);

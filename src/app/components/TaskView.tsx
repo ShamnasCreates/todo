@@ -1,65 +1,187 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { db, Todo } from "../lib/db";
 
 // shows task view with different colors based on if task is completed, props based on todo type
 export default function TaskView({ id, task, completed }: Todo) {
-  const [index, setIndex] = useState(completed);
+  const [check, setCheck] = useState(completed);
+  const [more, setMore] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [text, setText] = useState(task);
+  const taskView = useRef(null);
+  const editText = useRef(null);
+
+  useEffect(() => {
+    // close more options on outside click
+    const handleMoreOutside = (e) => {
+      if (edit && !taskView.current?.contains(e.target)) {
+        setEdit(false);
+        setText(task);
+      }
+      if (more && !taskView.current?.contains(e.target)) {
+        setMore(false);
+      }
+    };
+
+    // focused on text to edit 
+    if (edit) {
+      editText.current?.focus();
+    }
+
+    // opens more options
+    document.addEventListener("click", handleMoreOutside);
+  });
 
   // saves information in UI render and database
-  async function handleClick() {
-    await db.todo.update(id, { completed: !index });
-    console.log(`Updated ${id} to ${index}`);
-    setIndex(!index);
+  async function handleCheck() {
+    await db.todo.update(id, { completed: !check });
+    console.log(`Updated ${id} to ${check}`);
+    setCheck(!check);
+  }
+
+  // handles closing and opening the more options
+  function handleMore() {
+    // undo if edit is closed
+    if (edit) {
+      setEdit(false);
+      setText(task);
+    }
+    setMore(!more);
+  }
+
+  // deletes view
+  async function handleDelete() {
+    // do not switch these statements, needs to be deleted in this order
+    await db.todoDate.delete(id);
+    await db.todo.delete(id);
+  }
+
+  // handle edit feature view
+  async function handleEdit() {
+    // updates before turning off
+    if (edit) {
+      await db.todo.update(id, { task: text });
+    } 
+
+    setEdit(!edit);
+  }
+
+  async function handleSubmitEdit(e) {
+    e.preventDefault();
+    await handleEdit();
+  }
+
+  function handleEditChange(e) {
+    setText(e.target.value);
   }
 
   // return one task view
   return (
-    <div>
+    <div className="flex flex-col" ref={taskView}>
       {/* entire taskview bar to color area that is missing colors due to flex  */}
+
+      {/* top of view, basic */}
       <div
-        className={clsx("flex justify-between rounded-full", {
-          "bg-yellowX": !index,
-          "bg-greenX": index,
-        })}
+        className={clsx(
+          "flex justify-between",
+          { "bg-yellowX": !check, "bg-greenX": check },
+          {
+            " rounded-full": !more,
+            "rounded-t-[42px] border-b border-blackX": more,
+          },
+        )}
       >
         {/* left of task, noselect for checkbox */}
         <div
           className={clsx(
-            "min-h-20 min-w-12 text-blackX rounded-l-full flex justify-center items-center p-4 noselect",
-            { "bg-yellowX": !index, "bg-greenX": index },
+            "min-h-20 min-w-12 text-blackX flex justify-center items-center p-4 noselect",
+            { "bg-yellowX": !check, "bg-greenX": check },
+            { "rounded-l-full": !more, "rounded-tl-[42px]": more },
           )}
         >
           <button
-            onClick={handleClick}
+            onClick={handleCheck}
             className={clsx(
-              "material-symbols-outlined bg-blackX rounded-full p-2",
-              { "text-yellowX": !index, "text-greenX": index },
+              "material-symbols-outlined bg-blackX rounded-full p-2 cursor-pointer",
+              { "text-yellowX": !check, "text-greenX": check },
             )}
             style={{ fontSize: 32 }}
           >
-            {index ? "check_box" : "check_box_outline_blank"}
+            {check ? "check_box" : "check_box_outline_blank"}
           </button>
         </div>
-        {/* name of task  */}
-        <p
-          className={clsx(
-            "min-h-20 w-full text-blackX outline-none grow flex items-center",
-            { "bg-yellowX": !index, "bg-greenX": index },
-          )}
-        >
-          {task}
-        </p>
+        {/* name of task: conditional to edit */}
+        {!edit ? (
+          <p
+            style={{ whiteSpace: "pre-wrap" }}
+            className={clsx(
+              "min-h-20 w-full text-blackX outline-none grow flex items-center overflow-x-scroll scroll",
+              { "bg-yellowX": !check, "bg-greenX": check },
+            )}
+          >
+            {text}
+          </p>
+        ) : (
+          <form onSubmit={handleSubmitEdit} className="w-full">
+            <input
+              ref={editText}
+              type="text"
+              value={text}
+              onChange={handleEditChange}
+              className={clsx(
+                "min-h-20 w-full text-blackX outline-none grow flex items-center overflow-x-scroll scroll",
+                { "bg-yellowX": !check, "bg-greenX": check },
+              )}
+            ></input>
+          </form>
+        )}
 
         {/* right of task  */}
         <div
-          className={clsx("min-h-20 min-w-12 text-blackX rounded-r-full", {
-            "bg-yellowX": !index,
-            "bg-greenX": index,
-          })}
-        ></div>
+          className={clsx(
+            "min-h-20 min-w-12 text-blackX flex justify-center items-center p-4 noselect",
+            { "bg-yellowX": !check, "bg-greenX": check },
+            { "rounded-r-full": !more, "rounded-tr-[42px]": more },
+          )}
+        >
+          <button
+            onClick={handleMore}
+            className={clsx(
+              "material-symbols-outlined bg-blackX rounded-full cursor-pointer",
+              { "text-yellowX": !check, "text-greenX": check },
+            )}
+            style={{ fontSize: 32 }}
+          >
+            more_horiz
+          </button>
+        </div>
+      </div>
+
+      {/* bottom of view, more */}
+      <div
+        className={clsx(
+          "flex min-h-10.5 justify-evenly",
+          { "bg-yellowX": !check, "bg-greenX": check },
+          { hidden: !more, "visible rounded-b-full": more },
+        )}
+      >
+        {/* left side of bottom. edit */}
+        <button
+          onClick={handleEdit}
+          className="text-blackX flex justify-center items-center w-full border-t-[1px] border-r-[1px]  rounded-bl-full"
+        >
+          {edit ? "Finish Edit" : "Edit"}
+        </button>
+
+        {/* right side of bottom, delete */}
+        <button
+          onClick={handleDelete}
+          className="text-blackX  flex justify-center items-center w-full border-t-[1px] border-l-[1px] rounded-br-full"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

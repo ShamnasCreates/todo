@@ -25,13 +25,17 @@ export default function TaskViewList({
     for (const todo of tododate) {
       let test = await db.todo.where("id").equals(todo.todo_id).first();
 
+      if (!test)
+      {
+        return; 
+      }
       todoArray.push(test);
     }
 
-    console.log(todoArray);
     // Return result
     return todoArray;
   });
+
 
   // renders list of items 
   return (

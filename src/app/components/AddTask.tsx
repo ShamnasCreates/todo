@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { db } from "../lib/db";
+import type { ChangeEvent, SyntheticEvent } from "react";
 
 export default function AddTask({
   params,
@@ -40,11 +41,11 @@ export default function AddTask({
   }
 
 
-  function handleChange(e) {
+  function handleChange(e : ChangeEvent<HTMLInputElement>) {
     setTask(e.target.value);
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e : SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     await addTaskDate(); 
   }

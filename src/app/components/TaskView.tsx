@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { db, Todo } from "../lib/db";
+import type { ChangeEvent, SyntheticEvent } from "react";
 
 // shows task view with different colors based on if task is completed, props based on todo type
 export default function TaskView({ id, task, completed }: Todo) {
@@ -10,17 +11,17 @@ export default function TaskView({ id, task, completed }: Todo) {
   const [more, setMore] = useState(false);
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState(task);
-  const taskView = useRef(null);
-  const editText = useRef(null);
+  const taskView = useRef<HTMLDivElement>(null);
+  const editText = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // close more options on outside click
-    const handleMoreOutside = (e) => {
-      if (edit && !taskView.current?.contains(e.target)) {
+    const handleMoreOutside = (e : MouseEvent) => {
+      if (edit && !taskView.current?.contains(e.target as Node)) {
         setEdit(false);
         setText(task);
       }
-      if (more && !taskView.current?.contains(e.target)) {
+      if (more && !taskView.current?.contains(e.target as Node)) {
         setMore(false);
       }
     };
@@ -37,7 +38,6 @@ export default function TaskView({ id, task, completed }: Todo) {
   // saves information in UI render and database
   async function handleCheck() {
     await db.todo.update(id, { completed: !check });
-    console.log(`Updated ${id} to ${check}`);
     setCheck(!check);
   }
 
@@ -68,12 +68,12 @@ export default function TaskView({ id, task, completed }: Todo) {
     setEdit(!edit);
   }
 
-  async function handleSubmitEdit(e) {
+  async function handleSubmitEdit(e : SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     await handleEdit();
   }
 
-  function handleEditChange(e) {
+  function handleEditChange(e : ChangeEvent<HTMLInputElement>) {
     setText(e.target.value);
   }
 
@@ -170,7 +170,7 @@ export default function TaskView({ id, task, completed }: Todo) {
         {/* left side of bottom. edit */}
         <button
           onClick={handleEdit}
-          className="text-blackX flex justify-center items-center w-full border-t-[1px] border-r-[1px]  rounded-bl-full"
+          className="text-blackX flex justify-center items-center w-full border-t border-r  rounded-bl-full"
         >
           {edit ? "Finish Edit" : "Edit"}
         </button>
@@ -178,7 +178,7 @@ export default function TaskView({ id, task, completed }: Todo) {
         {/* right side of bottom, delete */}
         <button
           onClick={handleDelete}
-          className="text-blackX  flex justify-center items-center w-full border-t-[1px] border-l-[1px] rounded-br-full"
+          className="text-blackX  flex justify-center items-center w-full border-t border-l rounded-br-full"
         >
           Delete
         </button>

@@ -25,7 +25,7 @@ export default function DateNav({
 
   // for validating url
   let currentDate = new Date();
-  let dateFormat = currentDate.toLocaleDateString().replaceAll("/", "-");
+  let dateFormat = getDateFormat(currentDate);
   let dateCheck = date.replaceAll("-", "/");
 
   // Validate date
@@ -71,7 +71,6 @@ export default function DateNav({
     let lastSunday = new Date(lastWeek)
     lastSunday.setDate(lastSunday.getDate() + diffMondayLastWeek + 6)
 
-
     // next week 
     let nextWeek = new Date(dateCheck);
     nextWeek.setDate(nextWeek.getDate() + 7)
@@ -89,25 +88,19 @@ export default function DateNav({
     let nextSunday = new Date(nextWeek)
     nextSunday.setDate(nextSunday.getDate() + diffMondayLastWeek + 6)
 
-
     // too compare to end of sunday 
     lastSunday.setHours(23, 59, 59, 999);
     currentSunday.setHours(23, 59, 59, 999);
     nextSunday.setHours(23, 59, 59, 999);
 
-
     return [lastMonday, lastSunday, currentMonday, currentSunday, nextMonday, nextSunday]
-
   }
 
 
 
   function setTextFormat()
   {
-
     let check = new Date(); 
-
-
 
     let today = new Date(dateCheck);
 
@@ -126,7 +119,6 @@ export default function DateNav({
       setText("Tomorrow");
       return; 
     }
-
 
     // name it Monday - Sunday with Last, Current, Next 
     // Time works backwards 
@@ -157,7 +149,6 @@ export default function DateNav({
       setText(date);
       return;
     }
-
   }
 
   // go to current date
@@ -169,7 +160,7 @@ export default function DateNav({
     let thisDay = new Date(date);
     thisDay.setDate(thisDay.getDate() - 1);
 
-    let yesterdayFormat = thisDay.toLocaleDateString().replaceAll("/", "-");
+    let yesterdayFormat = getDateFormat(thisDay);
     push("/todo/" + yesterdayFormat);
   }
 
@@ -177,12 +168,21 @@ export default function DateNav({
     let thisDay = new Date(date);
     thisDay.setDate(thisDay.getDate() + 1);
 
-    let tomorrowFormat = thisDay.toLocaleDateString().replaceAll("/", "-");
+    let tomorrowFormat = getDateFormat(thisDay);
     push("/todo/" + tomorrowFormat);
   }
 
   function isValidDate(date : Date) {
     return date instanceof Date && !isNaN(date.getTime());
+  }
+
+  function getDateFormat(inDate: Date)
+  {
+    let day = inDate.getDate(); 
+    let month = inDate.getMonth() + 1; 
+    let year = inDate.getFullYear(); 
+
+    return `${month}-${day}-${year}`;
   }
 
   return (

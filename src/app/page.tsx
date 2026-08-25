@@ -10,11 +10,20 @@ export default function Home() {
 
   let date = new Date;
 
-  let dateFormat = date.toLocaleDateString().replaceAll("/", "-");
+  let dateFormat = getDateFormat(date);
 
   useEffect(() => {
      push('/todo/' + dateFormat);
   }, []);
+
+  function getDateFormat(inDate: Date)
+  {
+    let day = inDate.getDate(); 
+    let month = inDate.getMonth() + 1; 
+    let year = inDate.getFullYear(); 
+
+    return `${month}-${day}-${year}`;
+  }
 
 
   return (

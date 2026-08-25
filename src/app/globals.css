@@ -9,6 +9,7 @@
   --yellow: #cccc00;
 }
 
+
 @theme inline {
   --color-blackX: var(--black);
   --color-whiteX: var(--white);

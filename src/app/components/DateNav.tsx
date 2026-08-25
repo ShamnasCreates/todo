@@ -168,7 +168,7 @@ export default function DateNav({
   }
 
   function setYeterday() {
-    let thisDay = new Date(date);
+    let thisDay = new Date(dateCheck);
     thisDay.setDate(thisDay.getDate() - 1);
 
     let yesterdayFormat = getDateFormat(thisDay);
@@ -176,7 +176,7 @@ export default function DateNav({
   }
 
   function setTomorrow() {
-    let thisDay = new Date(date);
+    let thisDay = new Date(dateCheck);
     thisDay.setDate(thisDay.getDate() + 1);
 
     let tomorrowFormat = getDateFormat(thisDay);

@@ -100,25 +100,36 @@ export default function DateNav({
 
   function setTextFormat()
   {
-    let check = new Date(); 
 
     let today = new Date(dateCheck);
 
-    if (today.getDate() == check.getDate())
+
+    let check = new Date(); 
+
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 2)
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 2)
+
+    if (today.getTime() > yesterday.getTime() && today.getTime() < tomorrow.getTime())
     {
-      setText("Today");
-      return; 
-    } 
-    else if (today.getDate() + 1 == check.getDate())
-    {
-      setText("Yesterday");
-      return; 
+      if (today.getDate() == check.getDate())
+      {
+        setText("Today");
+        return; 
+      } 
+      else if (today.getDate() + 1 == check.getDate())
+      {
+        setText("Yesterday");
+        return; 
+      }
+      else if (today.getDate() - 1 == check.getDate())
+      {
+        setText("Tomorrow");
+        return; 
+      }
     }
-    else if (today.getDate() - 1 == check.getDate())
-    {
-      setText("Tomorrow");
-      return; 
-    }
+
 
     // name it Monday - Sunday with Last, Current, Next 
     // Time works backwards 

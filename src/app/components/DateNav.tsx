@@ -34,129 +34,125 @@ export default function DateNav({
       goToToday();
     }
 
-    setTextFormat()
+    setTextFormat();
   });
 
   function getMonSun() {
-    // this current week 
+    // this current week
     let thisDate = new Date(dateCheck);
     let diffMonday;
-    if (thisDate.getDay() != 0)
-    {
-      diffMonday = 1 - thisDate.getDay();   
-    }else 
-    {
-      diffMonday = -6; 
+    if (thisDate.getDay() != 0) {
+      diffMonday = 1 - thisDate.getDay();
+    } else {
+      diffMonday = -6;
     }
-    
-    let currentMonday = new Date(thisDate)
-    currentMonday.setDate(currentMonday.getDate() + diffMonday)
-    let currentSunday = new Date(thisDate)
-    currentSunday.setDate(currentSunday.getDate() + diffMonday + 6)  
 
-    // last week 
+    let currentMonday = new Date(thisDate);
+    currentMonday.setDate(currentMonday.getDate() + diffMonday);
+    let currentSunday = new Date(thisDate);
+    currentSunday.setDate(currentSunday.getDate() + diffMonday + 6);
+
+    // last week
     let lastWeek = new Date(dateCheck);
-    lastWeek.setDate(lastWeek.getDate() - 7)
+    lastWeek.setDate(lastWeek.getDate() - 7);
     let diffMondayLastWeek;
-    if (lastWeek.getDay() != 0)
-    {
-      diffMondayLastWeek = 1 - lastWeek.getDay();   
-    }else 
-    {
-      diffMondayLastWeek = -6; 
+    if (lastWeek.getDay() != 0) {
+      diffMondayLastWeek = 1 - lastWeek.getDay();
+    } else {
+      diffMondayLastWeek = -6;
     }
-  
-    let lastMonday = new Date(lastWeek)
-    lastMonday.setDate(lastMonday.getDate() + diffMondayLastWeek)
-    let lastSunday = new Date(lastWeek)
-    lastSunday.setDate(lastSunday.getDate() + diffMondayLastWeek + 6)
 
-    // next week 
+    let lastMonday = new Date(lastWeek);
+    lastMonday.setDate(lastMonday.getDate() + diffMondayLastWeek);
+    let lastSunday = new Date(lastWeek);
+    lastSunday.setDate(lastSunday.getDate() + diffMondayLastWeek + 6);
+
+    // next week
     let nextWeek = new Date(dateCheck);
-    nextWeek.setDate(nextWeek.getDate() + 7)
+    nextWeek.setDate(nextWeek.getDate() + 7);
     let diffMondayNextWeek;
-    if (nextWeek.getDay() != 0)
-    {
-      diffMondayNextWeek = 1 - nextWeek.getDay();   
-    }else 
-    {
-      diffMondayNextWeek = -6; 
+    if (nextWeek.getDay() != 0) {
+      diffMondayNextWeek = 1 - nextWeek.getDay();
+    } else {
+      diffMondayNextWeek = -6;
     }
 
-    let nextMonday = new Date(nextWeek)
-    nextMonday.setDate(nextMonday.getDate() + diffMondayLastWeek)
-    let nextSunday = new Date(nextWeek)
-    nextSunday.setDate(nextSunday.getDate() + diffMondayLastWeek + 6)
+    let nextMonday = new Date(nextWeek);
+    nextMonday.setDate(nextMonday.getDate() + diffMondayLastWeek);
+    let nextSunday = new Date(nextWeek);
+    nextSunday.setDate(nextSunday.getDate() + diffMondayLastWeek + 6);
 
-    // too compare to end of sunday 
+    // too compare to end of sunday
     lastSunday.setHours(23, 59, 59, 999);
     currentSunday.setHours(23, 59, 59, 999);
     nextSunday.setHours(23, 59, 59, 999);
 
-    return [lastMonday, lastSunday, currentMonday, currentSunday, nextMonday, nextSunday]
+    return [
+      lastMonday,
+      lastSunday,
+      currentMonday,
+      currentSunday,
+      nextMonday,
+      nextSunday,
+    ];
   }
 
-
-
-  function setTextFormat()
-  {
-
+  function setTextFormat() {
     let today = new Date(dateCheck);
 
-
-    let check = new Date(); 
+    let check = new Date();
 
     let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 2)
+    yesterday.setDate(check.getDate() - 1);
+    yesterday.setUTCHours(0,0,0,0);
     let tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 2)
+    tomorrow.setDate(check.getDate() + 1);
+    tomorrow.setUTCHours(23,59,59,999);
 
-    if (today.getTime() > yesterday.getTime() && today.getTime() < tomorrow.getTime())
-    {
-      if (today.getDate() == check.getDate())
-      {
+    if (
+      today.getTime() > yesterday.getTime() &&
+      today.getTime() < tomorrow.getTime()
+    ) {
+
+      if (today.getDate() == check.getDate()) {
         setText("Today");
-        return; 
-      } 
-      else if (today.getDate() + 1 == check.getDate())
-      {
+        return;
+      } else if (today.getTime() > yesterday.getTime() && today.getTime() < check.getTime()) {
         setText("Yesterday");
-        return; 
-      }
-      else if (today.getDate() - 1 == check.getDate())
-      {
+        return;
+      } else if (today.getTime() < tomorrow.getTime() && today.getTime() > check.getTime()) {
         setText("Tomorrow");
-        return; 
+        return;
       }
     }
 
-
-    // name it Monday - Sunday with Last, Current, Next 
-    // Time works backwards 
+    // name it Monday - Sunday with Last, Current, Next
+    // Time works backwards
     let monSun = getMonSun();
     let day = new Date(dateCheck).getDay();
-    //          to                                                 from 
-    if (check.getTime() <= monSun[1].getTime() && check.getTime() >= monSun[0].getTime())
-    {
+    //          to                                                 from
+    if (
+      check.getTime() <= monSun[1].getTime() &&
+      check.getTime() >= monSun[0].getTime()
+    ) {
       // next week
       setText("Next " + weekday[day]);
       return;
-
-    } else if (check.getTime() <= monSun[3].getTime() && check.getTime() >= monSun[2].getTime())
-    {
+    } else if (
+      check.getTime() <= monSun[3].getTime() &&
+      check.getTime() >= monSun[2].getTime()
+    ) {
       // this week
       setText(weekday[day]);
       return;
-    }
-    else if(check.getTime() <= monSun[5].getTime() && check.getTime() >= monSun[4].getTime())
-    {
-      // last week 
+    } else if (
+      check.getTime() <= monSun[5].getTime() &&
+      check.getTime() >= monSun[4].getTime()
+    ) {
+      // last week
       setText("Last " + weekday[day]);
       return;
-    
-    }
-    else 
-    {
+    } else {
       setText(date);
       return;
     }
@@ -183,15 +179,14 @@ export default function DateNav({
     push("/todo/" + tomorrowFormat);
   }
 
-  function isValidDate(date : Date) {
+  function isValidDate(date: Date) {
     return date instanceof Date && !isNaN(date.getTime());
   }
 
-  function getDateFormat(inDate: Date)
-  {
-    let day = inDate.getDate(); 
-    let month = inDate.getMonth() + 1; 
-    let year = inDate.getFullYear(); 
+  function getDateFormat(inDate: Date) {
+    let day = inDate.getDate();
+    let month = inDate.getMonth() + 1;
+    let year = inDate.getFullYear();
 
     return `${month}-${day}-${year}`;
   }

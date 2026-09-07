@@ -7,6 +7,8 @@
   --white: #efefef;
   --green: #00cc44;
   --yellow: #cccc00;
+  --yellow-lighter: #FFFF0A;
+  --green-lighter: #0AFF5C;
 }
 
 
@@ -15,6 +17,8 @@
   --color-whiteX: var(--white);
   --color-greenX: var(--green);
   --color-yellowX: var(--yellow);
+  --color-greenE: var(--green-lighter);
+  --color-yellowE: var(--yellow-lighter);
   --font-libre: var(--font-libre);
   --font-mont: var(--font-mont);
 }

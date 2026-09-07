@@ -102,28 +102,38 @@ export default function DateNav({
 
     let check = new Date();
 
-    let yesterday = new Date();
-    yesterday.setDate(check.getDate() - 1);
-    yesterday.setUTCHours(0,0,0,0);
-    let tomorrow = new Date();
-    tomorrow.setDate(check.getDate() + 1);
-    tomorrow.setUTCHours(23,59,59,999);
+    let yesterdayStart = new Date();
+    yesterdayStart.setDate(check.getDate() - 1);
+    yesterdayStart.setUTCHours(0, 0, 0, 0);
+    let yesterdayEnd = new Date();
+    yesterdayEnd.setDate(check.getDate() - 1);
+    yesterdayEnd.setUTCHours(23, 59, 59, 999);
+
+    let tomorrowStart = new Date();
+    tomorrowStart.setDate(check.getDate() + 1);
+    tomorrowStart.setUTCHours(0, 0, 0, 0);
+    let tomorrowEnd = new Date();
+    tomorrowEnd.setDate(check.getDate() + 1);
+    tomorrowEnd.setUTCHours(23, 59, 59, 999);
 
     if (
-      today.getTime() > yesterday.getTime() &&
-      today.getTime() < tomorrow.getTime()
+      today.getTime() > yesterdayStart.getTime() &&
+      today.getTime() < tomorrowEnd.getTime()
     ) {
-
       if (today.getDate() == check.getDate()) {
         setText("Today");
-        return;
-      } else if (today.getTime() > yesterday.getTime() && today.getTime() < check.getTime()) {
+      } else if (
+        today.getTime() > yesterdayStart.getTime() &&
+        today.getTime() < yesterdayEnd.getTime()
+      ) {
         setText("Yesterday");
-        return;
-      } else if (today.getTime() < tomorrow.getTime() && today.getTime() > check.getTime()) {
+      } else if (
+        today.getTime() < tomorrowEnd.getTime() &&
+        today.getTime() > tomorrowStart.getTime()
+      ) {
         setText("Tomorrow");
-        return;
       }
+      return;
     }
 
     // name it Monday - Sunday with Last, Current, Next

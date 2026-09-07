@@ -47,6 +47,7 @@ export default function AddTask({
 
   async function handleSubmit(e : SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!task.trim()) return;
     await addTaskDate(); 
   }
 

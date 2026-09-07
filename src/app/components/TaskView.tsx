@@ -16,7 +16,7 @@ export default function TaskView({ id, task, completed }: Todo) {
 
   useEffect(() => {
     // close more options on outside click
-    const handleMoreOutside = (e : MouseEvent) => {
+    const handleMoreOutside = (e: MouseEvent) => {
       if (edit && !taskView.current?.contains(e.target as Node)) {
         setEdit(false);
         setText(task);
@@ -26,7 +26,7 @@ export default function TaskView({ id, task, completed }: Todo) {
       }
     };
 
-    // focused on text to edit 
+    // focused on text to edit
     if (edit) {
       editText.current?.focus();
     }
@@ -63,17 +63,17 @@ export default function TaskView({ id, task, completed }: Todo) {
     // updates before turning off
     if (edit) {
       await db.todo.update(id, { task: text });
-    } 
+    }
 
     setEdit(!edit);
   }
 
-  async function handleSubmitEdit(e : SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmitEdit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     await handleEdit();
   }
 
-  function handleEditChange(e : ChangeEvent<HTMLInputElement>) {
+  function handleEditChange(e: ChangeEvent<HTMLInputElement>) {
     setText(e.target.value);
   }
 
@@ -86,7 +86,12 @@ export default function TaskView({ id, task, completed }: Todo) {
       <div
         className={clsx(
           "flex justify-between",
-          { "bg-yellowX": !check, "bg-greenX": check },
+          {
+            "bg-yellowX": !check && !edit,
+            "bg-greenX": check && !edit,
+            "bg-yellowE": !check && edit,
+            "bg-greenE": check && edit,
+          },
           {
             " rounded-full": !more,
             "rounded-t-[42px] border-b border-blackX": more,
@@ -97,7 +102,12 @@ export default function TaskView({ id, task, completed }: Todo) {
         <div
           className={clsx(
             "min-h-20 min-w-12 text-blackX flex justify-center items-center p-4 noselect",
-            { "bg-yellowX": !check, "bg-greenX": check },
+            {
+              "bg-yellowX": !check && !edit,
+              "bg-greenX": check && !edit,
+              "bg-yellowE": !check && edit,
+              "bg-greenE": check && edit,
+            },
             { "rounded-l-full": !more, "rounded-tl-[42px]": more },
           )}
         >
@@ -105,7 +115,12 @@ export default function TaskView({ id, task, completed }: Todo) {
             onClick={handleCheck}
             className={clsx(
               "material-symbols-outlined bg-blackX rounded-full p-2 cursor-pointer",
-              { "text-yellowX": !check, "text-greenX": check },
+              {
+                "text-yellowX": !check && !edit,
+                "text-greenX": check && !edit,
+                "text-yellowE": !check && edit,
+                "text-greenE": check && edit,
+              },
             )}
             style={{ fontSize: 32 }}
           >
@@ -118,7 +133,12 @@ export default function TaskView({ id, task, completed }: Todo) {
             style={{ whiteSpace: "pre-wrap" }}
             className={clsx(
               "min-h-20 w-full text-blackX outline-none grow flex items-center overflow-x-scroll scroll",
-              { "bg-yellowX": !check, "bg-greenX": check },
+              {
+                "bg-yellowX": !check && !edit,
+                "bg-greenX": check && !edit,
+                "bg-yellowE": !check && edit,
+                "bg-greenE": check && edit,
+              },
             )}
           >
             {text}
@@ -132,7 +152,12 @@ export default function TaskView({ id, task, completed }: Todo) {
               onChange={handleEditChange}
               className={clsx(
                 "min-h-20 w-full text-blackX outline-none grow flex items-center overflow-x-scroll scroll",
-                { "bg-yellowX": !check, "bg-greenX": check },
+                {
+                  "bg-yellowX": !check && !edit,
+                  "bg-greenX": check && !edit,
+                  "bg-yellowE": !check && edit,
+                  "bg-greenE": check && edit,
+                },
               )}
             ></input>
           </form>
@@ -142,7 +167,12 @@ export default function TaskView({ id, task, completed }: Todo) {
         <div
           className={clsx(
             "min-h-20 min-w-12 text-blackX flex justify-center items-center p-4 noselect",
-            { "bg-yellowX": !check, "bg-greenX": check },
+            {
+              "bg-yellowX": !check && !edit,
+              "bg-greenX": check && !edit,
+              "bg-yellowE": !check && edit,
+              "bg-greenE": check && edit,
+            },
             { "rounded-r-full": !more, "rounded-tr-[42px]": more },
           )}
         >
@@ -150,7 +180,12 @@ export default function TaskView({ id, task, completed }: Todo) {
             onClick={handleMore}
             className={clsx(
               "material-symbols-outlined bg-blackX rounded-full cursor-pointer",
-              { "text-yellowX": !check, "text-greenX": check },
+                  {
+                "text-yellowX": !check && !edit,
+                "text-greenX": check && !edit,
+                "text-yellowE": !check && edit,
+                "text-greenE": check && edit,
+              },
             )}
             style={{ fontSize: 32 }}
           >
@@ -163,7 +198,12 @@ export default function TaskView({ id, task, completed }: Todo) {
       <div
         className={clsx(
           "flex min-h-10.5 justify-evenly",
-          { "bg-yellowX": !check, "bg-greenX": check },
+          {
+            "bg-yellowX": !check && !edit,
+            "bg-greenX": check && !edit,
+            "bg-yellowE": !check && edit,
+            "bg-greenE": check && edit,
+          },
           { hidden: !more, "visible rounded-b-full": more },
         )}
       >

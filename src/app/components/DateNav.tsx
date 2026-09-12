@@ -99,22 +99,23 @@ export default function DateNav({
 
   function setTextFormat() {
     let today = new Date(dateCheck);
+    today.setHours(12, 12, 12, 12);
 
     let check = new Date();
 
     let yesterdayStart = new Date();
     yesterdayStart.setDate(check.getDate() - 1);
-    yesterdayStart.setUTCHours(0, 0, 0, 0);
+    yesterdayStart.setHours(0, 0, 0, 0);
     let yesterdayEnd = new Date();
     yesterdayEnd.setDate(check.getDate() - 1);
-    yesterdayEnd.setUTCHours(23, 59, 59, 999);
+    yesterdayEnd.setHours(23, 59, 59, 999);
 
     let tomorrowStart = new Date();
     tomorrowStart.setDate(check.getDate() + 1);
-    tomorrowStart.setUTCHours(0, 0, 0, 0);
+    tomorrowStart.setHours(0, 0, 0, 0);
     let tomorrowEnd = new Date();
     tomorrowEnd.setDate(check.getDate() + 1);
-    tomorrowEnd.setUTCHours(23, 59, 59, 999);
+    tomorrowEnd.setHours(23, 59, 59, 999);
 
     if (
       today.getTime() > yesterdayStart.getTime() &&
